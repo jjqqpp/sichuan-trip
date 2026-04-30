@@ -291,95 +291,33 @@
     .info-card h3 { margin: 0 0 12px; font-size: 23px; }
     .info-card ul { margin: 0; padding-left: 20px; line-height: 1.7; font-size: 16px; }
 
-    .live-panel {
-      margin: 24px 0 10px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr);
-      gap: 16px;
-    }
-    .weather-card, .drone-card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 22px;
-      box-shadow: 0 12px 28px rgba(0,0,0,.06);
-    }
-    .weather-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-      margin-bottom: 14px;
-    }
-    .weather-head h3, .drone-card h3 { margin: 0 0 8px; font-size: 23px; }
-    .weather-head p, .drone-card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 14px;
-    }
-    .weather-source {
-      flex: 0 0 auto;
-      color: var(--blue);
-      font-weight: 800;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    .weather-tabs {
+    .trip-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin: 12px 0;
+      justify-content: center;
+      min-height: 31px;
+      margin: 10px 0 12px;
     }
-    .weather-tabs button {
+    .trip-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 100%;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,.72);
-      color: var(--ink);
       border-radius: 999px;
-      padding: 9px 13px;
-      font: 800 14px/1 var(--font);
-      cursor: pointer;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.78);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.25;
+      white-space: normal;
     }
-    .weather-tabs button.active {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: white;
-    }
-    .weather-frame-wrap {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      overflow: hidden;
-      background: white;
-      min-height: 420px;
-    }
-    .weather-frame {
-      width: 100%;
-      height: 420px;
-      border: 0;
-      display: block;
-    }
-    .weather-note {
-      margin: 12px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.65;
-    }
-    .drone-list {
-      margin: 14px 0 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 10px;
-    }
-    .drone-list li {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,.68);
-      line-height: 1.55;
-      font-size: 14px;
-    }
-    .drone-list strong { color: var(--blue); }
+    .trip-chip.weather { color: var(--blue); }
+    .trip-chip.drone.ok { color: var(--green); }
+    .trip-chip.drone.caution { color: var(--orange); }
+    .trip-chip.drone.restricted { color: var(--red); }
     .safety-links {
       display: flex;
       flex-wrap: wrap;
@@ -448,9 +386,7 @@
       .photo { height: 180px; }
       .side { border-left: 0; border-top: 1px solid var(--line); grid-template-columns: 1fr; }
       .grid-info { grid-template-columns: 1fr; }
-      .live-panel { grid-template-columns: 1fr; }
-      .weather-head { display: block; }
-      .weather-source { display: inline-block; margin-top: 8px; }
+      .trip-tags { justify-content: flex-start; }
       .toolbar { overflow-x: auto; justify-content: flex-start; padding-left: 4px; }
       .toolbar button { flex: 0 0 auto; }
     }
@@ -459,8 +395,7 @@
       .toolbar { display: none; }
       body { background: white; }
       .page { width: 1500px; }
-      .day, .hero, .info-card, .route-bar, .weather-card, .drone-card { break-inside: avoid; }
-      .weather-frame-wrap { display: none; }
+      .day, .hero, .info-card, .route-bar { break-inside: avoid; }
     }
   </style>
 </head>
@@ -568,46 +503,6 @@
       <div class="info-card"><h3>📸 最佳拍摄点</h3><ul><li>红海子：湖面倒影</li><li>色拉林口：雪山溪流草原</li><li>塔公草原：雅拉雪山</li><li>墨石公园：地貌纹理</li></ul></div>
     </section>
 
-    <section class="live-panel">
-      <div class="weather-card">
-        <div class="weather-head">
-          <div>
-            <h3>实时天气预报</h3>
-            <p>打开页面时从中国天气网加载沿途城市/景区天气；高原行程建议重点看降水、风力、低温和道路结冰风险。</p>
-          </div>
-          <a class="weather-source" id="weatherSource" href="https://m.weather.com.cn/mweather1d/101270101.shtml" target="_blank" rel="noopener">打开来源</a>
-        </div>
-        <div class="weather-tabs" aria-label="沿途天气城市切换">
-          <button class="active" type="button" data-weather="https://m.weather.com.cn/mweather1d/101270101.shtml">成都</button>
-          <button type="button" data-weather="https://m.weather.com.cn/mweather1d/101271803.shtml">泸定</button>
-          <button type="button" data-weather="https://m.weather.com.cn/mweather1d/101271802.shtml">康定/新都桥</button>
-          <button type="button" data-weather="https://m.weather.com.cn/mweather1d/101271807.shtml">塔公/八美</button>
-          <button type="button" data-weather="https://m.weather.com.cn/mweather1d/101271804.shtml">丹巴</button>
-          <button type="button" data-weather="https://www.weather.com.cn/weather/10127190801A.shtml">四姑娘山</button>
-        </div>
-        <div class="weather-frame-wrap">
-          <iframe class="weather-frame" id="weatherFrame" title="沿途实时天气预报" loading="lazy" src="https://m.weather.com.cn/mweather1d/101270101.shtml"></iframe>
-        </div>
-        <p class="weather-note">若嵌入窗口因网络或站点策略无法显示，请点“打开来源”查看。天气信息会随中国天气网更新，不会离线缓存。</p>
-      </div>
-
-      <div class="drone-card">
-        <h3>无人机禁飞与报备</h3>
-        <p>川西有机场、军民航净空、景区管理和临时管制叠加，起飞前以 UOM、当地公告和设备电子围栏为准。</p>
-        <ul class="drone-list">
-          <li><strong>先查空域：</strong>真高 120 米以上、机场周边、军事/涉密区域、重要公共基础设施、重要文物纪念地等通常属于管制空域，未经批准不得飞。</li>
-          <li><strong>适飞空域：</strong>微型、轻型、小型无人机在适飞空域内飞行活动通常无需提前申请；但飞越集会人群、车上操控、投放物品、集群/分布式等仍需申请。</li>
-          <li><strong>行前动作：</strong>实名登记，更新电子围栏，检查电池、螺旋桨、返航高度、风速、降水和低温；景区、酒店、观景台有现场禁飞提示时按现场管理执行。</li>
-          <li><strong>川西重点：</strong>康定机场、甘孜格萨尔机场、亚丁机场周边，以及城镇、寺庙、口岸/边境、交通枢纽、重大活动区域不要凭经验起飞。</li>
-        </ul>
-        <div class="safety-links">
-          <a href="https://uom.caac.gov.cn/" target="_blank" rel="noopener">UOM 平台</a>
-          <a href="https://www.caac.gov.cn/XXGK/XXGK/FLFG/202401/t20240115_222642.html" target="_blank" rel="noopener">飞行管理条例</a>
-          <a href="https://www.gov.cn/gongbao/2024/issue_11246/202403/content_6941841.html" target="_blank" rel="noopener">运行安全规则</a>
-        </div>
-      </div>
-    </section>
-
     <div class="footer">温馨提示：川西天气多变，行程可根据路况和身体状态灵活调整。安全第一，享受旅途！</div>
     <details class="credits">
       <summary>图片来源</summary>
@@ -623,13 +518,83 @@
       document.body.className = style;
     }
 
-    document.querySelectorAll('[data-weather]').forEach((button) => {
-      button.addEventListener('click', () => {
-        const url = button.dataset.weather;
-        document.getElementById('weatherFrame').src = url;
-        document.getElementById('weatherSource').href = url;
-        document.querySelectorAll('[data-weather]').forEach((item) => item.classList.toggle('active', item === button));
-      });
+    const stopData = {
+      '成都出发': { day: '05-06', lat: 30.67, lon: 104.06, drone: '城区/机场净空谨慎', droneLevel: 'restricted' },
+      '泸定县 / 泸定桥': { day: '05-06', lat: 29.92, lon: 102.23, drone: '桥梁文保先问现场', droneLevel: 'caution' },
+      '海螺沟': { day: '05-06', lat: 29.58, lon: 102.00, drone: '景区按现场禁飞', droneLevel: 'caution' },
+      '康定入住': { day: '05-06', lat: 30.05, lon: 101.96, drone: '康定机场周边查UOM', droneLevel: 'restricted' },
+      '康定出发': { day: '05-07', lat: 30.05, lon: 101.96, drone: '康定机场周边查UOM', droneLevel: 'restricted' },
+      '红海子': { day: '05-07', lat: 30.13, lon: 101.87, drone: '查UOM和景区提示', droneLevel: 'caution' },
+      '色拉林口': { day: '05-07', lat: 30.08, lon: 101.74, drone: '查UOM/避开人群', droneLevel: 'caution' },
+      '新都桥': { day: '05-07', lat: 30.04, lon: 101.49, drone: '适飞也需避人群', droneLevel: 'ok' },
+      '新都桥出发': { day: '05-08', lat: 30.04, lon: 101.49, drone: '适飞也需避人群', droneLevel: 'ok' },
+      '甲根坝村': { day: '05-08', lat: 29.87, lon: 101.64, drone: '村落低空先沟通', droneLevel: 'caution' },
+      '塔公草原': { day: '05-08', lat: 30.32, lon: 101.54, drone: '寺庙/人群附近慎飞', droneLevel: 'caution' },
+      '墨石公园': { day: '05-08', lat: 30.47, lon: 101.59, drone: '景区按现场禁飞', droneLevel: 'caution' },
+      '丹巴入住': { day: '05-08', lat: 30.88, lon: 101.89, drone: '藏寨/人群先确认', droneLevel: 'caution' },
+      '丹巴出发': { day: '05-09', lat: 30.88, lon: 101.89, drone: '藏寨/人群先确认', droneLevel: 'caution' },
+      '长坪沟': { day: '05-09', lat: 31.02, lon: 102.86, drone: '景区按现场禁飞', droneLevel: 'restricted' },
+      '返回成都': { day: '05-09', lat: 30.67, lon: 104.06, drone: '城区/机场净空谨慎', droneLevel: 'restricted' }
+    };
+
+    function dateForTrip(monthDay) {
+      const now = new Date();
+      let year = now.getFullYear();
+      const tripDate = new Date(`${year}-${monthDay}T00:00:00+08:00`);
+      if (now - tripDate > 30 * 24 * 60 * 60 * 1000) year += 1;
+      return `${year}-${monthDay}`;
+    }
+
+    function formatWeather(data, date) {
+      const daily = data.daily;
+      const index = daily.time.indexOf(date);
+      if (index === -1) return '天气暂不可用';
+      const min = Math.round(daily.temperature_2m_min[index]);
+      const max = Math.round(daily.temperature_2m_max[index]);
+      const rain = daily.precipitation_probability_max[index];
+      const rainMm = daily.precipitation_sum[index];
+      const wind = Math.round(daily.wind_speed_10m_max[index]);
+      return `${date.slice(5).replace('-', '/')} ${min}-${max}°C · 降雨${rain ?? '--'}%/${rainMm ?? '--'}mm · 风${wind}km/h`;
+    }
+
+    async function loadWeatherForStop(stop, chip) {
+      const date = dateForTrip(stop.day);
+      const url = new URL('https://api.open-meteo.com/v1/forecast');
+      url.search = new URLSearchParams({
+        latitude: stop.lat,
+        longitude: stop.lon,
+        daily: 'temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,wind_speed_10m_max',
+        timezone: 'Asia/Shanghai',
+        start_date: date,
+        end_date: date
+      }).toString();
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('weather unavailable');
+        chip.textContent = `天气 ${formatWeather(await response.json(), date)}`;
+      } catch (error) {
+        chip.textContent = '天气 暂不可用';
+        chip.title = '天气 API 暂时无法访问，请出发前再查中国天气网或当地气象预警。';
+      }
+    }
+
+    document.querySelectorAll('.node').forEach((node) => {
+      const title = node.querySelector('h3')?.textContent.trim();
+      const stop = stopData[title];
+      if (!stop) return;
+
+      const tags = document.createElement('div');
+      tags.className = 'trip-tags';
+      const weatherChip = document.createElement('span');
+      weatherChip.className = 'trip-chip weather';
+      weatherChip.textContent = '天气 加载中';
+      const droneChip = document.createElement('span');
+      droneChip.className = `trip-chip drone ${stop.droneLevel}`;
+      droneChip.textContent = `无人机 ${stop.drone}`;
+      tags.append(weatherChip, droneChip);
+      node.querySelector('.meta')?.after(tags);
+      loadWeatherForStop(stop, weatherChip);
     });
   </script>
 </body>
