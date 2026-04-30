@@ -315,6 +315,9 @@
       white-space: normal;
     }
     .trip-chip.weather { color: var(--blue); }
+    .trip-chip.drive { color: #4b5563; text-decoration: none; }
+    .trip-chip.drive.live { color: var(--green); }
+    .trip-chip.drive:hover { text-decoration: underline; }
     .trip-chip.drone.ok { color: var(--green); }
     .trip-chip.drone.caution { color: var(--orange); }
     .trip-chip.drone.restricted { color: var(--red); }
@@ -537,6 +540,21 @@
       '返回成都': { day: '05-09', lat: 30.67, lon: 104.06, drone: '城区/机场净空谨慎', droneLevel: 'restricted' }
     };
 
+    const legData = {
+      '成都出发': { to: '泸定县 / 泸定桥', distance: '230km', estimate: '2.5-3h' },
+      '泸定县 / 泸定桥': { to: '海螺沟', distance: '50km', estimate: '1-1.5h' },
+      '海螺沟': { to: '康定入住', distance: '110km', estimate: '2.5-3h' },
+      '康定出发': { to: '红海子', distance: '35km', estimate: '0.8-1h' },
+      '红海子': { to: '色拉林口', distance: '40km', estimate: '1-1.2h' },
+      '色拉林口': { to: '新都桥', distance: '70km', estimate: '1.5-2h' },
+      '新都桥出发': { to: '甲根坝村', distance: '35km', estimate: '1-1.5h' },
+      '甲根坝村': { to: '塔公草原', distance: '65km', estimate: '1.5-2h' },
+      '塔公草原': { to: '墨石公园', distance: '30km', estimate: '0.6-0.8h' },
+      '墨石公园': { to: '丹巴入住', distance: '90km', estimate: '2-2.5h' },
+      '丹巴出发': { to: '长坪沟', distance: '90km', estimate: '2.5-3h' },
+      '长坪沟': { to: '返回成都', distance: '300km', estimate: '5-6h' }
+    };
+
     function dateForTrip(monthDay) {
       const now = new Date();
       let year = now.getFullYear();
@@ -579,6 +597,59 @@
       }
     }
 
+    function amapRouteUrl(fromTitle, toTitle) {
+      const from = stopData[fromTitle];
+      const to = stopData[toTitle];
+      if (!from || !to) return 'https://ditu.amap.com/';
+      const params = new URLSearchParams({
+        from: `${from.lon},${from.lat},${fromTitle}`,
+        to: `${to.lon},${to.lat},${toTitle}`,
+        mode: 'car',
+        policy: '1'
+      });
+      return `https://uri.amap.com/navigation?${params.toString()}`;
+    }
+
+    function secondsToDriveTime(seconds) {
+      const minutes = Math.round(Number(seconds) / 60);
+      if (!Number.isFinite(minutes)) return '';
+      const hours = Math.floor(minutes / 60);
+      const rest = minutes % 60;
+      if (!hours) return `${rest}min`;
+      return rest ? `${hours}h${rest}min` : `${hours}h`;
+    }
+
+    async function loadDriveTime(title, leg, chip) {
+      const key = localStorage.getItem('amapWebServiceKey');
+      if (!key) return;
+      const from = stopData[title];
+      const to = stopData[leg.to];
+      if (!from || !to) return;
+
+      const url = new URL('https://restapi.amap.com/v3/direction/driving');
+      url.search = new URLSearchParams({
+        key,
+        origin: `${from.lon},${from.lat}`,
+        destination: `${to.lon},${to.lat}`,
+        extensions: 'base',
+        strategy: '4'
+      }).toString();
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) return;
+        const data = await response.json();
+        const path = data.route?.paths?.[0];
+        if (!path?.duration) return;
+        const distanceKm = path.distance ? `${(Number(path.distance) / 1000).toFixed(0)}km` : leg.distance;
+        chip.textContent = `驾车 到${leg.to} · 实时 ${distanceKm}/${secondsToDriveTime(path.duration)}`;
+        chip.classList.add('live');
+        chip.title = '实时用时来自高德路径规划 API；仍建议出发前打开地图确认导航。';
+      } catch (error) {
+        chip.title = '实时路径 API 暂不可用，已保留基础预计用时。';
+      }
+    }
+
     document.querySelectorAll('.node').forEach((node) => {
       const title = node.querySelector('h3')?.textContent.trim();
       const stop = stopData[title];
@@ -592,7 +663,20 @@
       const droneChip = document.createElement('span');
       droneChip.className = `trip-chip drone ${stop.droneLevel}`;
       droneChip.textContent = `无人机 ${stop.drone}`;
-      tags.append(weatherChip, droneChip);
+      tags.append(weatherChip);
+      const leg = legData[title];
+      if (leg) {
+        const driveChip = document.createElement('a');
+        driveChip.className = 'trip-chip drive';
+        driveChip.href = amapRouteUrl(title, leg.to);
+        driveChip.target = '_blank';
+        driveChip.rel = 'noopener';
+        driveChip.textContent = `驾车 到${leg.to} · ${leg.distance}/${leg.estimate}`;
+        driveChip.title = '点击打开高德地图查看实时路线；如在浏览器 localStorage 设置 amapWebServiceKey，可在页面内显示实时 ETA。';
+        tags.append(driveChip);
+        loadDriveTime(title, leg, driveChip);
+      }
+      tags.append(droneChip);
       node.querySelector('.meta')?.after(tags);
       loadWeatherForStop(stop, weatherChip);
     });
