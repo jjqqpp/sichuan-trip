@@ -437,7 +437,7 @@
     <button onclick="setStyle('xhs')">小红书爆款风</button>
     <button onclick="setStyle('map')">地图路线风</button>
     <button onclick="setAmapKey()">设置高德 Key</button>
-    <button onclick="window.print()">打印 / 导出 PDF</button>
+    <button onclick="downloadRouteMap()">导出路线图</button>
   </div>
 
   <main class="page">
@@ -562,6 +562,15 @@
         localStorage.removeItem('amapWebServiceKey');
       }
       window.location.reload();
+    }
+
+    function downloadRouteMap() {
+      const link = document.createElement('a');
+      link.href = 'assets/images/route_map.png';
+      link.download = 'western-sichuan-route-map.png';
+      document.body.append(link);
+      link.click();
+      link.remove();
     }
 
     const DEFAULT_AMAP_WEB_SERVICE_KEY = '6ef02c4127e2978cfbc712994806925e';
