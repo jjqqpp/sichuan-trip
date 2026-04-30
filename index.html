@@ -430,6 +430,7 @@
     <button onclick="setStyle('minimal')">极简高级风</button>
     <button onclick="setStyle('xhs')">小红书爆款风</button>
     <button onclick="setStyle('map')">地图路线风</button>
+    <button onclick="setAmapKey()">设置高德 Key</button>
     <button onclick="window.print()">打印 / 导出 PDF</button>
   </div>
 
@@ -542,6 +543,19 @@
   <script>
     function setStyle(style) {
       document.body.className = style;
+    }
+
+    function setAmapKey() {
+      const currentKey = localStorage.getItem('amapWebServiceKey') || '';
+      const key = prompt('请输入高德 Web服务 Key。只保存在当前浏览器，不会写入 GitHub 源码。', currentKey);
+      if (key === null) return;
+      const trimmed = key.trim();
+      if (trimmed) {
+        localStorage.setItem('amapWebServiceKey', trimmed);
+      } else {
+        localStorage.removeItem('amapWebServiceKey');
+      }
+      window.location.reload();
     }
 
     const stopData = {
