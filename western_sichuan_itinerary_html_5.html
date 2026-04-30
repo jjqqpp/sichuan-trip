@@ -708,8 +708,8 @@
         driveChip.href = amapRouteUrl(title, leg.to);
         driveChip.target = '_blank';
         driveChip.rel = 'noopener';
-        driveChip.textContent = `驾车 到${leg.to} · ${leg.distance}/${leg.estimate}`;
-        driveChip.title = '点击打开高德地图查看实时路线；如在浏览器 localStorage 设置 amapWebServiceKey，可在页面内显示实时 ETA。';
+        driveChip.textContent = `驾车 到${leg.to} · 预估 ${leg.distance}/${leg.estimate}`;
+        driveChip.title = '点击打开高德地图查看实时路线；点击页面顶部“设置高德 Key”后，可在页面内显示实时 ETA。';
         const legWrap = document.createElement('div');
         legWrap.className = 'drive-leg';
         legWrap.append(driveChip);
