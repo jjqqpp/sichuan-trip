@@ -237,6 +237,7 @@
       text-align: center;
       pointer-events: none;
     }
+    .node .drive-leg { display: none; }
     .drive-leg .trip-chip {
       pointer-events: auto;
       justify-content: center;
@@ -401,11 +402,16 @@
       .timeline { grid-template-columns: 1fr !important; padding-top: 24px; }
       .timeline::before { display: none; }
       .drive-leg {
+        display: none;
+      }
+      .node .drive-leg {
+        display: block;
         position: static;
         width: auto;
         transform: none;
         margin: 2px 0 12px;
         text-align: left;
+        pointer-events: none;
       }
       .dot { margin-left: 0; }
       .node h3, .node .meta { text-align: left; }
@@ -661,7 +667,8 @@
     const driveDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     let driveQueue = Promise.resolve();
 
-    async function loadDriveTime(title, leg, chip) {
+    async function loadDriveTime(title, leg, chips) {
+      const chipList = Array.isArray(chips) ? chips : [chips];
       const key = localStorage.getItem('amapWebServiceKey') || DEFAULT_AMAP_WEB_SERVICE_KEY;
       if (!key) return;
       const from = stopData[title];
@@ -684,17 +691,21 @@
         const path = data.route?.paths?.[0];
         if (!path?.duration) return;
         const distanceKm = path.distance ? `${(Number(path.distance) / 1000).toFixed(0)}km` : leg.distance;
-        chip.textContent = `驾车 到${leg.to} · 实时 ${distanceKm}/${secondsToDriveTime(path.duration)}`;
-        chip.classList.add('live');
-        chip.title = '实时用时来自高德路径规划 API；仍建议出发前打开地图确认导航。';
+        chipList.forEach((chip) => {
+          chip.textContent = `驾车 到${leg.to} · 实时 ${distanceKm}/${secondsToDriveTime(path.duration)}`;
+          chip.classList.add('live');
+          chip.title = '实时用时来自高德路径规划 API；仍建议出发前打开地图确认导航。';
+        });
       } catch (error) {
-        chip.title = '实时路径 API 暂不可用，已保留基础预计用时。';
+        chipList.forEach((chip) => {
+          chip.title = '实时路径 API 暂不可用，已保留基础预计用时。';
+        });
       }
     }
 
-    function queueDriveTime(title, leg, chip) {
+    function queueDriveTime(title, leg, chips) {
       driveQueue = driveQueue
-        .then(() => loadDriveTime(title, leg, chip))
+        .then(() => loadDriveTime(title, leg, chips))
         .then(() => driveDelay(700))
         .catch(() => driveDelay(700));
     }
@@ -728,8 +739,11 @@
         const columns = Number(node.closest('.timeline')?.style.getPropertyValue('--cols')) || 1;
         const index = [...node.parentElement.children].filter((child) => child.classList.contains('node')).indexOf(node);
         legWrap.style.left = `${((index + 1) / columns) * 100}%`;
+        const mobileLegWrap = legWrap.cloneNode(true);
+        const mobileDriveChip = mobileLegWrap.querySelector('.drive');
+        node.append(mobileLegWrap);
         node.closest('.timeline')?.append(legWrap);
-        queueDriveTime(title, leg, driveChip);
+        queueDriveTime(title, leg, [driveChip, mobileDriveChip]);
       }
       tags.append(droneChip);
       node.querySelector('.meta')?.after(tags);
