@@ -83,7 +83,7 @@
       color: #fff;
       background:
         linear-gradient(90deg, rgba(5,20,44,.9), rgba(5,34,60,.55), rgba(5,20,44,.1)),
-        url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2400&q=80') center/cover;
+        url('assets/images/real/gongga-hailuogou-hero.jpg') center/cover;
       box-shadow: var(--shadow);
     }
 
@@ -302,6 +302,17 @@
       font-weight: 900;
     }
 
+    .credits {
+      margin: 18px auto 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+      max-width: 980px;
+    }
+    .credits summary { cursor: pointer; font-weight: 700; color: var(--ink); }
+    .credits a { color: var(--blue); text-decoration: none; }
+    .credits a:hover { text-decoration: underline; }
+
     body.xhs .hero h1 { font-family: var(--font); text-shadow: 3px 3px 0 rgba(255,95,126,.45); }
     body.xhs .day { border-width: 2px; }
     body.xhs .photo { transform: rotate(-1deg); }
@@ -311,7 +322,7 @@
     body.minimal .photo { filter: saturate(.75); }
     body.minimal .route-bar { background: #111; }
 
-    body.map .hero { background: linear-gradient(90deg, rgba(16,41,31,.92), rgba(40,92,65,.48)), url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2400&q=80') center/cover; }
+    body.map .hero { background: linear-gradient(90deg, rgba(16,41,31,.92), rgba(40,92,65,.48)), url('assets/images/real/siguniang-hero.jpg') center/cover; }
     body.map .route-bar { background: #214d35; }
     body.map .timeline::before { background: repeating-linear-gradient(90deg, var(--green), var(--green) 10px, transparent 10px, transparent 18px); }
 
@@ -376,10 +387,10 @@
       <div class="main">
         <div class="title">成都出发，一路向西：冰川与康定夜色</div>
         <div class="timeline" style="--cols:4">
-          <article class="node"><div class="dot"></div><h3>成都出发</h3><div class="meta">07:00 · 海拔约500m</div><div class="photo"><img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80" alt="城市出发"></div><p class="desc">建议早出城，避开进山车流。一路预计2–2.5小时到泸定县附近。</p></article>
-          <article class="node"><div class="dot"></div><h3>泸定县 / 泸定桥</h3><div class="meta">可选打卡 · 30–60min</div><div class="photo"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80" alt="峡谷桥梁"></div><p class="desc">如果停车顺、排队少，可以短暂停留；如果时间紧，不建议强求。</p></article>
-          <article class="node"><div class="dot"></div><h3>海螺沟</h3><div class="meta">12:00左右到达 · 建议3–4h</div><div class="photo"><img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80" alt="雪山冰川"></div><p class="desc">重点看冰川、雪山、观景台。下午不要拖太晚，避免夜路赶康定。</p></article>
-          <article class="node"><div class="dot"></div><h3>康定入住</h3><div class="meta">晚上入住 · 海拔约2560m</div><div class="photo"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80" alt="夜景"></div><p class="desc">第一晚以休息为主，少喝酒、少剧烈运动，给身体适应时间。</p></article>
+          <article class="node"><div class="dot"></div><h3>成都出发</h3><div class="meta">07:00 · 海拔约500m</div><div class="photo"><img src="assets/images/real/chengdu-skyline.jpg" alt="城市出发"></div><p class="desc">建议早出城，避开进山车流。一路预计2–2.5小时到泸定县附近。</p></article>
+          <article class="node"><div class="dot"></div><h3>泸定县 / 泸定桥</h3><div class="meta">可选打卡 · 30–60min</div><div class="photo"><img src="assets/images/real/luding-bridge.jpg" alt="峡谷桥梁"></div><p class="desc">如果停车顺、排队少，可以短暂停留；如果时间紧，不建议强求。</p></article>
+          <article class="node"><div class="dot"></div><h3>海螺沟</h3><div class="meta">12:00左右到达 · 建议3–4h</div><div class="photo"><img src="assets/images/real/hailuogou-glacier.jpg" alt="雪山冰川"></div><p class="desc">重点看冰川、雪山、观景台。下午不要拖太晚，避免夜路赶康定。</p></article>
+          <article class="node"><div class="dot"></div><h3>康定入住</h3><div class="meta">晚上入住 · 海拔约2560m</div><div class="photo"><img src="assets/images/real/kangding-city.jpg" alt="夜景"></div><p class="desc">第一晚以休息为主，少喝酒、少剧烈运动，给身体适应时间。</p></article>
         </div>
         <div class="tipline">💡 小贴士：泸定桥可打卡但不必执着；海螺沟游玩时间要留足；晚上上康定尽量早点到。</div>
       </div>
@@ -394,10 +405,10 @@
       <div class="main">
         <div class="title">雪山倒影、溪流草原，进入摄影天堂</div>
         <div class="timeline" style="--cols:4">
-          <article class="node"><div class="dot"></div><h3>康定出发</h3><div class="meta">08:00 · 沿途风景优美</div><div class="photo"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80" alt="山谷"></div><p class="desc">今天节奏相对轻松，适合边走边拍，但不要剧烈跑跳。</p></article>
-          <article class="node"><div class="dot"></div><h3>红海子</h3><div class="meta">看风与天气 · 早上更稳</div><div class="photo"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80" alt="湖泊雪山"></div><p class="desc">无风时倒影最美；天气不好时可以缩短停留。</p></article>
-          <article class="node"><div class="dot"></div><h3>色拉林口</h3><div class="meta">必停 · 雪山溪流草原同框</div><div class="photo"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80" alt="溪流草原"></div><p class="desc">这里非常适合停车拍照，是整段路线上很值得停的点。</p></article>
-          <article class="node"><div class="dot"></div><h3>新都桥</h3><div class="meta">入住 · 海拔约3300m</div><div class="photo"><img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=800&q=80" alt="山间小镇"></div><p class="desc">选汉庭等连锁更稳；如担心高反，优先选有供氧/制氧设备的房型。</p></article>
+          <article class="node"><div class="dot"></div><h3>康定出发</h3><div class="meta">08:00 · 沿途风景优美</div><div class="photo"><img src="assets/images/real/kangding-surroundings.jpg" alt="山谷"></div><p class="desc">今天节奏相对轻松，适合边走边拍，但不要剧烈跑跳。</p></article>
+          <article class="node"><div class="dot"></div><h3>红海子</h3><div class="meta">看风与天气 · 早上更稳</div><div class="photo"><img src="assets/images/real/mugecuo-lake.jpg" alt="湖泊雪山"></div><p class="desc">无风时倒影最美；天气不好时可以缩短停留。</p></article>
+          <article class="node"><div class="dot"></div><h3>色拉林口</h3><div class="meta">必停 · 雪山溪流草原同框</div><div class="photo"><img src="assets/images/real/yala-tagong.jpg" alt="色拉林口附近雪山草原"></div><p class="desc">这里非常适合停车拍照，是整段路线上很值得停的点。</p></article>
+          <article class="node"><div class="dot"></div><h3>新都桥</h3><div class="meta">入住 · 海拔约3300m</div><div class="photo"><img src="assets/images/real/xinduqiao.jpg" alt="山间小镇"></div><p class="desc">选汉庭等连锁更稳；如担心高反，优先选有供氧/制氧设备的房型。</p></article>
         </div>
         <div class="tipline">💡 小贴士：天空之城看天气决定是否去；色拉林口一定停；新都桥开始要明显关注高反。</div>
       </div>
@@ -412,11 +423,11 @@
       <div class="main">
         <div class="title">小路、草原、异星地貌，一天看尽川西层次</div>
         <div class="timeline" style="--cols:5">
-          <article class="node"><div class="dot"></div><h3>新都桥出发</h3><div class="meta">08:00 · 注意补给</div><div class="photo"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80" alt="草原山路"></div><p class="desc">今天驾驶强度较高，建议早餐吃好，水和零食备足。</p></article>
-          <article class="node"><div class="dot"></div><h3>甲根坝村</h3><div class="meta">逆向前往 · 路窄会车难</div><div class="photo"><img src="https://images.unsplash.com/photo-1520637836862-4d197d17c55a?auto=format&fit=crop&w=800&q=80" alt="村庄小路"></div><p class="desc">适合老司机；新手或大车慎入。路窄，会车很考验技术。</p></article>
-          <article class="node"><div class="dot"></div><h3>塔公草原</h3><div class="meta">雅拉雪山观景</div><div class="photo"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80" alt="草原雪山"></div><p class="desc">视野开阔，天气好时能远眺雅拉雪山，适合短暂停留拍照。</p></article>
-          <article class="node"><div class="dot"></div><h3>墨石公园</h3><div class="meta">建议1.5–2h</div><div class="photo"><img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80" alt="岩石地貌"></div><p class="desc">地貌独特，拍照出片。土拨鼠牧场票不一定必要，外面也可能看到。</p></article>
-          <article class="node"><div class="dot"></div><h3>丹巴入住</h3><div class="meta">海拔约1800m</div><div class="photo"><img src="https://images.unsplash.com/photo-1476611338391-6f395a0ebc7b?auto=format&fit=crop&w=800&q=80" alt="藏寨风情"></div><p class="desc">海拔下降，通常会舒服很多。可体验藏寨风情。</p></article>
+          <article class="node"><div class="dot"></div><h3>新都桥出发</h3><div class="meta">08:00 · 注意补给</div><div class="photo"><img src="assets/images/real/kangding-surroundings.jpg" alt="草原山路"></div><p class="desc">今天驾驶强度较高，建议早餐吃好，水和零食备足。</p></article>
+          <article class="node"><div class="dot"></div><h3>甲根坝村</h3><div class="meta">逆向前往 · 路窄会车难</div><div class="photo"><img src="assets/images/real/danba-zhonglu-village.jpg" alt="村庄小路"></div><p class="desc">适合老司机；新手或大车慎入。路窄，会车很考验技术。</p></article>
+          <article class="node"><div class="dot"></div><h3>塔公草原</h3><div class="meta">雅拉雪山观景</div><div class="photo"><img src="assets/images/real/tagong-grassland.jpg" alt="塔公草原"></div><p class="desc">视野开阔，天气好时能远眺雅拉雪山，适合短暂停留拍照。</p></article>
+          <article class="node"><div class="dot"></div><h3>墨石公园</h3><div class="meta">建议1.5–2h</div><div class="photo"><img src="assets/images/real/moshi-park.jpg" alt="墨石公园岩石地貌"></div><p class="desc">地貌独特，拍照出片。土拨鼠牧场票不一定必要，外面也可能看到。</p></article>
+          <article class="node"><div class="dot"></div><h3>丹巴入住</h3><div class="meta">海拔约1800m</div><div class="photo"><img src="assets/images/real/danba-zhonglu-village.jpg" alt="藏寨风情"></div><p class="desc">海拔下降，通常会舒服很多。可体验藏寨风情。</p></article>
         </div>
         <div class="tipline">💡 小贴士：甲根坝是驾驶难点；土拨鼠牧场不必强买票；今天不要把每个点都玩太满。</div>
       </div>
@@ -431,9 +442,9 @@
       <div class="main">
         <div class="title">长坪沟徒步与返程：最美，也最考验体力</div>
         <div class="timeline" style="--cols:3">
-          <article class="node"><div class="dot"></div><h3>丹巴出发</h3><div class="meta">07:00 · 山路多</div><div class="photo"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80" alt="山路"></div><p class="desc">丹巴到四姑娘山路不太好走，贴山体路段较多，下雨要特别注意落石。</p></article>
-          <article class="node"><div class="dot"></div><h3>长坪沟</h3><div class="meta">建议早进山 · 徒步往返约22km</div><div class="photo"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="雪山峡谷"></div><p class="desc">全程徒步强度大；骑马往返约660/人。虫虫脚瀑布不建议硬爬，远观即可。</p></article>
-          <article class="node"><div class="dot"></div><h3>返回成都</h3><div class="meta">约300km · 5–6h</div><div class="photo"><img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80" alt="返回城市"></div><p class="desc">如果完整徒步后返成都会很累，建议控制长坪沟游玩时间，避免疲劳夜驾。</p></article>
+          <article class="node"><div class="dot"></div><h3>丹巴出发</h3><div class="meta">07:00 · 山路多</div><div class="photo"><img src="assets/images/real/danba-zhonglu-village.jpg" alt="丹巴山地藏寨"></div><p class="desc">丹巴到四姑娘山路不太好走，贴山体路段较多，下雨要特别注意落石。</p></article>
+          <article class="node"><div class="dot"></div><h3>长坪沟</h3><div class="meta">建议早进山 · 徒步往返约22km</div><div class="photo"><img src="assets/images/real/siguniang-mountain.jpg" alt="雪山峡谷"></div><p class="desc">全程徒步强度大；骑马往返约660/人。虫虫脚瀑布不建议硬爬，远观即可。</p></article>
+          <article class="node"><div class="dot"></div><h3>返回成都</h3><div class="meta">约300km · 5–6h</div><div class="photo"><img src="assets/images/real/chengdu-skyline.jpg" alt="返回城市"></div><p class="desc">如果完整徒步后返成都会很累，建议控制长坪沟游玩时间，避免疲劳夜驾。</p></article>
         </div>
         <div class="tipline">⚠️ 重点提醒：Day 4最容易超时。想完整走长坪沟，最好加一晚；不加晚就轻量游玩。</div>
       </div>
@@ -448,6 +459,13 @@
     </section>
 
     <div class="footer">温馨提示：川西天气多变，行程可根据路况和身体状态灵活调整。安全第一，享受旅途！</div>
+    <details class="credits">
+      <summary>图片来源</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Central_Chengdu_skyline_at_dawn_-_Flickr.jpg">成都天际线</a>、<a href="https://commons.wikimedia.org/wiki/File:Luding_Bridge_over_the_Dadu_River,_in_Luding_County,_Sichuan,_China,_2018.jpg">泸定桥</a>、<a href="https://commons.wikimedia.org/wiki/File:Hailuogou_glacier.JPG">海螺沟冰川</a>、<a href="https://commons.wikimedia.org/wiki/File:Kangding_from_above.jpg">康定城区</a>、<a href="https://commons.wikimedia.org/wiki/File:%E6%96%B0%E9%83%BD%E6%A1%A5%E7%BE%8E%E6%99%AF_-_Scenary_of_Xinduqiao_Town_-_2012.10_-_panoramio.jpg">新都桥</a>、<a href="https://commons.wikimedia.org/wiki/File:Grasslands_in_Tagong_county,_Sichuan,_China_(41077322430).jpg">塔公草原</a>、<a href="https://commons.wikimedia.org/wiki/File:Zhonglu_Tibetan_Village.jpg">丹巴中路藏寨</a>、<a href="https://commons.wikimedia.org/wiki/File:Mount_Siguniang_2.jpg">四姑娘山</a>等来自 Wikimedia Commons。</li>
+        <li><a href="https://en.people.cn/n3/2019/0725/c90000-9600410.html">墨石公园图片</a>来自 People's Daily Online；如需商业或公开长期使用，建议更换为明确开放授权图片。</li>
+      </ul>
+    </details>
   </main>
 
   <script>
