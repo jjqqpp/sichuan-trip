@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>川西4日环线行程攻略</title>
+  <style>
+    :root {
+      --bg: #f6f3ea;
+      --card: rgba(255,255,255,.86);
+      --ink: #162033;
+      --muted: #667085;
+      --line: #d8deea;
+      --blue: #0b4f9c;
+      --green: #157347;
+      --orange: #d96b00;
+      --red: #bf2424;
+      --shadow: 0 18px 48px rgba(20, 40, 80, .12);
+      --radius: 28px;
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(80, 140, 220, .18), transparent 32%),
+        radial-gradient(circle at 90% 8%, rgba(255, 180, 90, .18), transparent 30%),
+        linear-gradient(180deg, #fbfaf6 0%, var(--bg) 100%);
+      min-height: 100vh;
+    }
+
+    body.minimal {
+      --bg: #f7f7f4;
+      --card: rgba(255,255,255,.92);
+      --ink: #111827;
+      --muted: #5f6776;
+      --line: #d9d9d6;
+      --shadow: 0 18px 50px rgba(0,0,0,.08);
+    }
+
+    body.xhs {
+      --bg: #fff5ee;
+      --card: rgba(255,255,255,.9);
+      --ink: #241827;
+      --muted: #7b6670;
+      --line: #ffd4c9;
+      --blue: #ff5f7e;
+      --green: #19a78c;
+      --orange: #ff8a00;
+      --red: #ef3f61;
+      --shadow: 0 18px 45px rgba(255, 90, 120, .16);
+    }
+
+    body.map {
+      --bg: #eef3e9;
+      --card: rgba(255,255,255,.84);
+      --ink: #14251e;
+      --muted: #607167;
+      --line: #c8d9c9;
+      --blue: #1f6fb2;
+      --green: #2f7d47;
+      --orange: #cf6a22;
+      --red: #b63131;
+      --shadow: 0 18px 46px rgba(35, 80, 55, .14);
+    }
+
+    .page {
+      width: min(1500px, 100%);
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 36px;
+      min-height: 390px;
+      padding: 42px;
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(5,20,44,.9), rgba(5,34,60,.55), rgba(5,20,44,.1)),
+        url('assets/images/real/gongga-hailuogou-hero.jpg') center/cover;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(48px, 7vw, 104px);
+      line-height: .95;
+      letter-spacing: -4px;
+      font-weight: 900;
+    }
+
+    .hero p {
+      margin: 18px 0 0;
+      font-size: clamp(20px, 2.4vw, 34px);
+      font-weight: 700;
+      opacity: .95;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.9);
+      color: #10223a;
+      font-size: 18px;
+      font-weight: 800;
+      backdrop-filter: blur(12px);
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      padding: 18px 0 10px;
+      background: linear-gradient(180deg, rgba(246,243,234,.94), rgba(246,243,234,.65), transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .toolbar button {
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 16px;
+      font-weight: 800;
+      box-shadow: 0 8px 22px rgba(0,0,0,.06);
+      cursor: pointer;
+    }
+
+    .route-bar {
+      margin: 22px 0;
+      padding: 22px;
+      border-radius: 28px;
+      background: #082e63;
+      color: white;
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 8px;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    .stop {
+      text-align: center;
+      position: relative;
+      font-weight: 900;
+      font-size: 18px;
+    }
+    .stop::before {
+      content: "";
+      display: block;
+      width: 18px; height: 18px;
+      border: 4px solid white;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      background: var(--blue);
+    }
+
+    .day {
+      display: grid;
+      grid-template-columns: 210px 1fr 260px;
+      gap: 20px;
+      margin: 24px 0;
+      border-radius: var(--radius);
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .day-label {
+      padding: 28px 24px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--blue), #063060);
+    }
+    .day:nth-of-type(2) .day-label { background: linear-gradient(135deg, var(--green), #084a34); }
+    .day:nth-of-type(3) .day-label { background: linear-gradient(135deg, var(--orange), #8f3e00); }
+    .day:nth-of-type(4) .day-label { background: linear-gradient(135deg, var(--red), #781515); }
+
+    .day-label .big { font-size: 42px; line-height: 1; font-weight: 950; }
+    .day-label .date { margin-top: 10px; font-size: 22px; font-weight: 900; }
+    .day-label .summary { margin-top: 28px; line-height: 1.7; font-size: 17px; font-weight: 700; }
+
+    .main { padding: 26px 10px 28px 0; }
+    .title {
+      font-size: 31px;
+      line-height: 1.2;
+      font-weight: 950;
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(var(--cols), 1fr);
+      gap: 16px;
+      position: relative;
+      padding-top: 56px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 34px;
+      left: 8%; right: 8%;
+      height: 3px;
+      background: repeating-linear-gradient(90deg, var(--blue), var(--blue) 10px, transparent 10px, transparent 18px);
+      opacity: .55;
+    }
+
+    .node { position: relative; z-index: 1; }
+    .drive-leg {
+      position: absolute;
+      top: 2px;
+      left: 0;
+      width: 180px;
+      transform: translateX(-50%);
+      z-index: 3;
+      text-align: center;
+      pointer-events: none;
+    }
+    .node .drive-leg { display: none; }
+    .drive-leg .trip-chip {
+      pointer-events: auto;
+      justify-content: center;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 8px 22px rgba(0,0,0,.10);
+    }
+    .dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 4px solid white;
+      background: var(--blue);
+      margin: 0 auto 12px;
+      box-shadow: 0 0 0 3px var(--blue);
+    }
+    .node h3 { margin: 0 0 6px; text-align: center; font-size: 20px; }
+    .node .meta { text-align: center; color: var(--muted); font-weight: 800; margin-bottom: 10px; font-size: 14px; }
+    .photo {
+      height: 132px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #dfe8f2, #b8cce2);
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(0,0,0,.12);
+    }
+    .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .desc { margin-top: 12px; font-size: 16px; line-height: 1.45; font-weight: 650; }
+
+    .tipline {
+      margin-top: 18px;
+      padding: 13px 16px;
+      border-radius: 16px;
+      background: #fff8df;
+      border: 1px solid #f4d98b;
+      font-size: 17px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .side {
+      padding: 18px;
+      border-left: 1px solid var(--line);
+      background: rgba(255,255,255,.45);
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px;
+      background: rgba(255,255,255,.72);
+    }
+    .box h4 { margin: 0 0 12px; font-size: 21px; color: var(--blue); }
+    .box ul { margin: 0; padding-left: 20px; line-height: 1.7; font-size: 16px; font-weight: 650; }
+
+    .grid-info {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 24px 0 10px;
+    }
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.06);
+    }
+    .info-card h3 { margin: 0 0 12px; font-size: 23px; }
+    .info-card ul { margin: 0; padding-left: 20px; line-height: 1.7; font-size: 16px; }
+
+    .trip-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      min-height: 31px;
+      margin: 10px 0 12px;
+    }
+    .trip-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.78);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.25;
+      white-space: normal;
+    }
+    .trip-chip.weather { color: var(--blue); }
+    .trip-chip.drive { color: #4b5563; text-decoration: none; }
+    .trip-chip.drive.live { color: var(--green); }
+    .trip-chip.drive:hover { text-decoration: underline; }
+    .trip-chip.drone.ok { color: var(--green); }
+    .trip-chip.drone.caution { color: var(--orange); }
+    .trip-chip.drone.restricted { color: var(--red); }
+    .safety-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .safety-links a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 13px;
+      background: rgba(255,255,255,.72);
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      padding: 22px;
+      border-radius: 24px;
+      background: #082e63;
+      color: white;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .credits {
+      margin: 18px auto 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+      max-width: 980px;
+    }
+    .credits summary { cursor: pointer; font-weight: 700; color: var(--ink); }
+    .credits a { color: var(--blue); text-decoration: none; }
+    .credits a:hover { text-decoration: underline; }
+
+    body.xhs .hero h1 { font-family: var(--font); text-shadow: 3px 3px 0 rgba(255,95,126,.45); }
+    body.xhs .day { border-width: 2px; }
+    body.xhs .photo { transform: rotate(-1deg); }
+    body.xhs .node:nth-child(even) .photo { transform: rotate(1deg); }
+
+    body.minimal .hero { background: linear-gradient(135deg, #111, #333); }
+    body.minimal .photo { filter: saturate(.75); }
+    body.minimal .route-bar { background: #111; }
+
+    body.map .hero { background: linear-gradient(90deg, rgba(16,41,31,.92), rgba(40,92,65,.48)), url('assets/images/real/siguniang-hero.jpg') center/cover; }
+    body.map .route-bar { background: #214d35; }
+    body.map .timeline::before { background: repeating-linear-gradient(90deg, var(--green), var(--green) 10px, transparent 10px, transparent 18px); }
+
+    @media (max-width: 980px) {
+      .page { padding: 14px; }
+      .hero { padding: 28px; border-radius: 26px; min-height: 300px; }
+      .hero h1 { letter-spacing: -2px; }
+      .route-bar { grid-template-columns: repeat(3, 1fr); }
+      .day { grid-template-columns: 1fr; }
+      .day-label { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; }
+      .day-label .summary { grid-column: 1 / -1; margin-top: 4px; }
+      .main { padding: 22px; }
+      .timeline { grid-template-columns: 1fr !important; padding-top: 24px; }
+      .timeline::before { display: none; }
+      .drive-leg {
+        display: none;
+      }
+      .node .drive-leg {
+        display: block;
+        position: static;
+        width: auto;
+        transform: none;
+        margin: 2px 0 12px;
+        text-align: left;
+        pointer-events: none;
+      }
+      .dot { margin-left: 0; }
+      .node h3, .node .meta { text-align: left; }
+      .photo { height: 180px; }
+      .side { border-left: 0; border-top: 1px solid var(--line); grid-template-columns: 1fr; }
+      .grid-info { grid-template-columns: 1fr; }
+      .trip-tags { justify-content: flex-start; }
+      .toolbar { overflow-x: auto; justify-content: flex-start; padding-left: 4px; }
+      .toolbar button { flex: 0 0 auto; }
+    }
+
+    @media print {
+      .toolbar { display: none; }
+      body { background: white; }
+      .page { width: 1500px; }
+      .day, .hero, .info-card, .route-bar { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body class="minimal">
+  <div class="toolbar">
+    <button onclick="setStyle('minimal')">极简高级风</button>
+    <button onclick="setStyle('xhs')">小红书爆款风</button>
+    <button onclick="setStyle('map')">地图路线风</button>
+    <button onclick="setAmapKey()">设置高德 Key</button>
+    <button onclick="window.print()">打印 / 导出 PDF</button>
+  </div>
+
+  <main class="page">
+    <section class="hero">
+      <h1>川西4日环线<br>行程攻略</h1>
+      <p>成都出发 · 雪山草原 · 藏寨秘境 · 徒步探险</p>
+      <div class="badges">
+        <span class="badge">📅 4天3晚</span>
+        <span class="badge">🚗 约1100km</span>
+        <span class="badge">🏔️ 海拔约500–3800m</span>
+        <span class="badge">🔌 住宿建议插座/供氧</span>
+        <span class="badge">⚠️ 注意高反与落石</span>
+      </div>
+    </section>
+
+    <section class="route-bar">
+      <div class="stop">成都</div><div class="stop">海螺沟</div><div class="stop">康定</div><div class="stop">红海子</div><div class="stop">新都桥</div><div class="stop">甲根坝</div><div class="stop">墨石公园</div><div class="stop">丹巴</div><div class="stop">四姑娘山</div>
+    </section>
+
+    <section class="day">
+      <aside class="day-label">
+        <div><div class="big">DAY 1</div><div class="date">5.6 周一</div></div>
+        <div class="summary">成都 → 海螺沟 → 康定<br>全程约340km · 车程约6.5h</div>
+      </aside>
+      <div class="main">
+        <div class="title">成都出发，一路向西：冰川与康定夜色</div>
+        <div class="timeline" style="--cols:4">
+          <article class="node"><div class="dot"></div><h3>成都出发</h3><div class="meta">07:00 · 海拔约500m</div><div class="photo"><img src="assets/images/real/chengdu-skyline.jpg" alt="城市出发"></div><p class="desc">建议早出城，避开进山车流。一路预计2–2.5小时到泸定县附近。</p></article>
+          <article class="node"><div class="dot"></div><h3>泸定县 / 泸定桥</h3><div class="meta">可选打卡 · 30–60min</div><div class="photo"><img src="assets/images/real/luding-bridge.jpg" alt="峡谷桥梁"></div><p class="desc">如果停车顺、排队少，可以短暂停留；如果时间紧，不建议强求。</p></article>
+          <article class="node"><div class="dot"></div><h3>海螺沟</h3><div class="meta">12:00左右到达 · 建议3–4h</div><div class="photo"><img src="assets/images/real/hailuogou-glacier.jpg" alt="雪山冰川"></div><p class="desc">重点看冰川、雪山、观景台。下午不要拖太晚，避免夜路赶康定。</p></article>
+          <article class="node"><div class="dot"></div><h3>康定入住</h3><div class="meta">晚上入住 · 海拔约2560m</div><div class="photo"><img src="assets/images/real/kangding-city.jpg" alt="夜景"></div><p class="desc">第一晚以休息为主，少喝酒、少剧烈运动，给身体适应时间。</p></article>
+        </div>
+        <div class="tipline">💡 小贴士：泸定桥可打卡但不必执着；海螺沟游玩时间要留足；晚上上康定尽量早点到。</div>
+      </div>
+      <aside class="side"><div class="box"><h4>今日亮点</h4><ul><li>泸定桥可选打卡</li><li>海螺沟冰川景观</li><li>康定夜色与休整</li></ul></div><div class="box"><h4>住宿建议</h4><ul><li>康定市区酒店</li><li>海拔约2560m</li><li>建议早点休息</li></ul></div></aside>
+    </section>
+
+    <section class="day">
+      <aside class="day-label">
+        <div><div class="big">DAY 2</div><div class="date">5.7 周二</div></div>
+        <div class="summary">康定 → 红海子 → 天空之城/色拉林口 → 新都桥<br>全程约150km · 车程约3.5h</div>
+      </aside>
+      <div class="main">
+        <div class="title">雪山倒影、溪流草原，进入摄影天堂</div>
+        <div class="timeline" style="--cols:4">
+          <article class="node"><div class="dot"></div><h3>康定出发</h3><div class="meta">08:00 · 沿途风景优美</div><div class="photo"><img src="assets/images/real/kangding-surroundings.jpg" alt="山谷"></div><p class="desc">今天节奏相对轻松，适合边走边拍，但不要剧烈跑跳。</p></article>
+          <article class="node"><div class="dot"></div><h3>红海子</h3><div class="meta">看风与天气 · 早上更稳</div><div class="photo"><img src="assets/images/real/mugecuo-lake.jpg" alt="湖泊雪山"></div><p class="desc">无风时倒影最美；天气不好时可以缩短停留。</p></article>
+          <article class="node"><div class="dot"></div><h3>色拉林口</h3><div class="meta">必停 · 雪山溪流草原同框</div><div class="photo"><img src="assets/images/real/yala-tagong.jpg" alt="色拉林口附近雪山草原"></div><p class="desc">这里非常适合停车拍照，是整段路线上很值得停的点。</p></article>
+          <article class="node"><div class="dot"></div><h3>新都桥</h3><div class="meta">入住 · 海拔约3300m</div><div class="photo"><img src="assets/images/real/xinduqiao.jpg" alt="山间小镇"></div><p class="desc">选汉庭等连锁更稳；如担心高反，优先选有供氧/制氧设备的房型。</p></article>
+        </div>
+        <div class="tipline">💡 小贴士：天空之城看天气决定是否去；色拉林口一定停；新都桥开始要明显关注高反。</div>
+      </div>
+      <aside class="side"><div class="box"><h4>今日亮点</h4><ul><li>红海子倒影</li><li>色拉林口雪山草原</li><li>新都桥摄影天堂</li></ul></div><div class="box"><h4>住宿建议</h4><ul><li>新都桥汉庭酒店</li><li>海拔约3300m</li><li>建议插鼻供氧/制氧</li></ul></div></aside>
+    </section>
+
+    <section class="day">
+      <aside class="day-label">
+        <div><div class="big">DAY 3</div><div class="date">5.8 周三</div></div>
+        <div class="summary">新都桥 → 甲根坝 → 塔公草原 → 墨石公园 → 丹巴<br>全程约220km · 车程约6h</div>
+      </aside>
+      <div class="main">
+        <div class="title">小路、草原、异星地貌，一天看尽川西层次</div>
+        <div class="timeline" style="--cols:5">
+          <article class="node"><div class="dot"></div><h3>新都桥出发</h3><div class="meta">08:00 · 注意补给</div><div class="photo"><img src="assets/images/real/kangding-surroundings.jpg" alt="草原山路"></div><p class="desc">今天驾驶强度较高，建议早餐吃好，水和零食备足。</p></article>
+          <article class="node"><div class="dot"></div><h3>甲根坝村</h3><div class="meta">逆向前往 · 路窄会车难</div><div class="photo"><img src="assets/images/real/danba-zhonglu-village.jpg" alt="村庄小路"></div><p class="desc">适合老司机；新手或大车慎入。路窄，会车很考验技术。</p></article>
+          <article class="node"><div class="dot"></div><h3>塔公草原</h3><div class="meta">雅拉雪山观景</div><div class="photo"><img src="assets/images/real/tagong-grassland.jpg" alt="塔公草原"></div><p class="desc">视野开阔，天气好时能远眺雅拉雪山，适合短暂停留拍照。</p></article>
+          <article class="node"><div class="dot"></div><h3>墨石公园</h3><div class="meta">建议1.5–2h</div><div class="photo"><img src="assets/images/real/moshi-park.jpg" alt="墨石公园岩石地貌"></div><p class="desc">地貌独特，拍照出片。土拨鼠牧场票不一定必要，外面也可能看到。</p></article>
+          <article class="node"><div class="dot"></div><h3>丹巴入住</h3><div class="meta">海拔约1800m</div><div class="photo"><img src="assets/images/real/danba-zhonglu-village.jpg" alt="藏寨风情"></div><p class="desc">海拔下降，通常会舒服很多。可体验藏寨风情。</p></article>
+        </div>
+        <div class="tipline">💡 小贴士：甲根坝是驾驶难点；土拨鼠牧场不必强买票；今天不要把每个点都玩太满。</div>
+      </div>
+      <aside class="side"><div class="box"><h4>今日亮点</h4><ul><li>甲根坝原始村落</li><li>塔公草原观雪山</li><li>墨石公园地貌奇观</li></ul></div><div class="box"><h4>住宿建议</h4><ul><li>丹巴县酒店</li><li>海拔约1800m</li><li>适合恢复体力</li></ul></div></aside>
+    </section>
+
+    <section class="day">
+      <aside class="day-label">
+        <div><div class="big">DAY 4</div><div class="date">5.9 周四</div></div>
+        <div class="summary">丹巴 → 四姑娘山长坪沟 → 成都<br>全程约390km · 车程约8h</div>
+      </aside>
+      <div class="main">
+        <div class="title">长坪沟徒步与返程：最美，也最考验体力</div>
+        <div class="timeline" style="--cols:3">
+          <article class="node"><div class="dot"></div><h3>丹巴出发</h3><div class="meta">07:00 · 山路多</div><div class="photo"><img src="assets/images/real/danba-zhonglu-village.jpg" alt="丹巴山地藏寨"></div><p class="desc">丹巴到四姑娘山路不太好走，贴山体路段较多，下雨要特别注意落石。</p></article>
+          <article class="node"><div class="dot"></div><h3>长坪沟</h3><div class="meta">建议早进山 · 徒步往返约22km</div><div class="photo"><img src="assets/images/real/siguniang-mountain.jpg" alt="雪山峡谷"></div><p class="desc">全程徒步强度大；骑马往返约660/人。虫虫脚瀑布不建议硬爬，远观即可。</p></article>
+          <article class="node"><div class="dot"></div><h3>返回成都</h3><div class="meta">约300km · 5–6h</div><div class="photo"><img src="assets/images/real/chengdu-skyline.jpg" alt="返回城市"></div><p class="desc">如果完整徒步后返成都会很累，建议控制长坪沟游玩时间，避免疲劳夜驾。</p></article>
+        </div>
+        <div class="tipline">⚠️ 重点提醒：Day 4最容易超时。想完整走长坪沟，最好加一晚；不加晚就轻量游玩。</div>
+      </div>
+      <aside class="side"><div class="box"><h4>今日亮点</h4><ul><li>长坪沟徒步探险</li><li>四姑娘山雪山风光</li><li>完成川西小环线</li></ul></div><div class="box"><h4>时间提示</h4><ul><li>长坪沟建议6–8小时</li><li>出山后返程5–6小时</li><li>谨慎安排体力</li></ul></div></aside>
+    </section>
+
+    <section class="grid-info">
+      <div class="info-card"><h3>🎒 行前准备</h3><ul><li>身份证、驾驶证、学生证等优惠证件</li><li>冲锋衣/抓绒衣、保暖内衣</li><li>防晒衣、帽子、墨镜</li><li>徒步鞋、登山杖、头灯/手套</li></ul></div>
+      <div class="info-card"><h3>💊 高反预防</h3><ul><li>逐步适应海拔，不要剧烈运动</li><li>多喝水、少饮酒，不要洗澡洗头</li><li>可准备葡萄糖、氧气瓶、常用药</li><li>严重不适及时下撤</li></ul></div>
+      <div class="info-card"><h3>🚗 路况提示</h3><ul><li>甲根坝路窄，会车困难</li><li>丹巴到四姑娘山雨天注意落石</li><li>全程部分路段限速，谨慎驾驶</li><li>冬季或雨季提前查路况</li></ul></div>
+      <div class="info-card"><h3>📸 最佳拍摄点</h3><ul><li>红海子：湖面倒影</li><li>色拉林口：雪山溪流草原</li><li>塔公草原：雅拉雪山</li><li>墨石公园：地貌纹理</li></ul></div>
+    </section>
+
+    <div class="footer">温馨提示：川西天气多变，行程可根据路况和身体状态灵活调整。安全第一，享受旅途！</div>
+    <details class="credits">
+      <summary>图片来源</summary>
+      <ul>
+        <li><a href="https://commons.wikimedia.org/wiki/File:Central_Chengdu_skyline_at_dawn_-_Flickr.jpg">成都天际线</a>、<a href="https://commons.wikimedia.org/wiki/File:Luding_Bridge_over_the_Dadu_River,_in_Luding_County,_Sichuan,_China,_2018.jpg">泸定桥</a>、<a href="https://commons.wikimedia.org/wiki/File:Hailuogou_glacier.JPG">海螺沟冰川</a>、<a href="https://commons.wikimedia.org/wiki/File:Kangding_from_above.jpg">康定城区</a>、<a href="https://commons.wikimedia.org/wiki/File:%E6%96%B0%E9%83%BD%E6%A1%A5%E7%BE%8E%E6%99%AF_-_Scenary_of_Xinduqiao_Town_-_2012.10_-_panoramio.jpg">新都桥</a>、<a href="https://commons.wikimedia.org/wiki/File:Grasslands_in_Tagong_county,_Sichuan,_China_(41077322430).jpg">塔公草原</a>、<a href="https://commons.wikimedia.org/wiki/File:Zhonglu_Tibetan_Village.jpg">丹巴中路藏寨</a>、<a href="https://commons.wikimedia.org/wiki/File:Mount_Siguniang_2.jpg">四姑娘山</a>等来自 Wikimedia Commons。</li>
+        <li><a href="https://en.people.cn/n3/2019/0725/c90000-9600410.html">墨石公园图片</a>来自 People's Daily Online；如需商业或公开长期使用，建议更换为明确开放授权图片。</li>
+      </ul>
+    </details>
+  </main>
+
+  <script>
+    function setStyle(style) {
+      document.body.className = style;
+    }
+
+    function setAmapKey() {
+      const currentKey = localStorage.getItem('amapWebServiceKey') || '';
+      const key = prompt('请输入高德 Web服务 Key。只保存在当前浏览器，不会写入 GitHub 源码。', currentKey);
+      if (key === null) return;
+      const trimmed = key.trim();
+      if (trimmed) {
+        localStorage.setItem('amapWebServiceKey', trimmed);
+      } else {
+        localStorage.removeItem('amapWebServiceKey');
+      }
+      window.location.reload();
+    }
+
+    const DEFAULT_AMAP_WEB_SERVICE_KEY = '6ef02c4127e2978cfbc712994806925e';
+
+    const stopData = {
+      '成都出发': { day: '05-06', lat: 30.67, lon: 104.06, drone: '城区/机场净空谨慎', droneLevel: 'restricted' },
+      '泸定县 / 泸定桥': { day: '05-06', lat: 29.92, lon: 102.23, drone: '桥梁文保先问现场', droneLevel: 'caution' },
+      '海螺沟': { day: '05-06', lat: 29.58, lon: 102.00, drone: '景区按现场禁飞', droneLevel: 'caution' },
+      '康定入住': { day: '05-06', lat: 30.05, lon: 101.96, drone: '康定机场周边查UOM', droneLevel: 'restricted' },
+      '康定出发': { day: '05-07', lat: 30.05, lon: 101.96, drone: '康定机场周边查UOM', droneLevel: 'restricted' },
+      '红海子': { day: '05-07', lat: 30.13, lon: 101.87, drone: '查UOM和景区提示', droneLevel: 'caution' },
+      '色拉林口': { day: '05-07', lat: 30.08, lon: 101.74, drone: '查UOM/避开人群', droneLevel: 'caution' },
+      '新都桥': { day: '05-07', lat: 30.04, lon: 101.49, drone: '适飞也需避人群', droneLevel: 'ok' },
+      '新都桥出发': { day: '05-08', lat: 30.04, lon: 101.49, drone: '适飞也需避人群', droneLevel: 'ok' },
+      '甲根坝村': { day: '05-08', lat: 29.87, lon: 101.64, drone: '村落低空先沟通', droneLevel: 'caution' },
+      '塔公草原': { day: '05-08', lat: 30.32, lon: 101.54, drone: '寺庙/人群附近慎飞', droneLevel: 'caution' },
+      '墨石公园': { day: '05-08', lat: 30.47, lon: 101.59, drone: '景区按现场禁飞', droneLevel: 'caution' },
+      '丹巴入住': { day: '05-08', lat: 30.88, lon: 101.89, drone: '藏寨/人群先确认', droneLevel: 'caution' },
+      '丹巴出发': { day: '05-09', lat: 30.88, lon: 101.89, drone: '藏寨/人群先确认', droneLevel: 'caution' },
+      '长坪沟': { day: '05-09', lat: 31.02, lon: 102.86, drone: '景区按现场禁飞', droneLevel: 'restricted' },
+      '返回成都': { day: '05-09', lat: 30.67, lon: 104.06, drone: '城区/机场净空谨慎', droneLevel: 'restricted' }
+    };
+
+    const legData = {
+      '成都出发': { to: '泸定县 / 泸定桥', distance: '230km', estimate: '2.5-3h' },
+      '泸定县 / 泸定桥': { to: '海螺沟', distance: '50km', estimate: '1-1.5h' },
+      '海螺沟': { to: '康定入住', distance: '110km', estimate: '2.5-3h' },
+      '康定出发': { to: '红海子', distance: '35km', estimate: '0.8-1h' },
+      '红海子': { to: '色拉林口', distance: '40km', estimate: '1-1.2h' },
+      '色拉林口': { to: '新都桥', distance: '70km', estimate: '1.5-2h' },
+      '新都桥出发': { to: '甲根坝村', distance: '35km', estimate: '1-1.5h' },
+      '甲根坝村': { to: '塔公草原', distance: '65km', estimate: '1.5-2h' },
+      '塔公草原': { to: '墨石公园', distance: '30km', estimate: '0.6-0.8h' },
+      '墨石公园': { to: '丹巴入住', distance: '90km', estimate: '2-2.5h' },
+      '丹巴出发': { to: '长坪沟', distance: '90km', estimate: '2.5-3h' },
+      '长坪沟': { to: '返回成都', distance: '300km', estimate: '5-6h' }
+    };
+
+    function dateForTrip(monthDay) {
+      const now = new Date();
+      let year = now.getFullYear();
+      const tripDate = new Date(`${year}-${monthDay}T00:00:00+08:00`);
+      if (now - tripDate > 30 * 24 * 60 * 60 * 1000) year += 1;
+      return `${year}-${monthDay}`;
+    }
+
+    function formatWeather(data, date) {
+      const daily = data.daily;
+      const index = daily.time.indexOf(date);
+      if (index === -1) return '天气暂不可用';
+      const min = Math.round(daily.temperature_2m_min[index]);
+      const max = Math.round(daily.temperature_2m_max[index]);
+      const rain = daily.precipitation_probability_max[index];
+      const rainMm = daily.precipitation_sum[index];
+      const wind = Math.round(daily.wind_speed_10m_max[index]);
+      return `${date.slice(5).replace('-', '/')} ${min}-${max}°C · 降雨${rain ?? '--'}%/${rainMm ?? '--'}mm · 风${wind}km/h`;
+    }
+
+    async function loadWeatherForStop(stop, chip) {
+      const date = dateForTrip(stop.day);
+      const url = new URL('https://api.open-meteo.com/v1/forecast');
+      url.search = new URLSearchParams({
+        latitude: stop.lat,
+        longitude: stop.lon,
+        daily: 'temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,wind_speed_10m_max',
+        timezone: 'Asia/Shanghai',
+        start_date: date,
+        end_date: date
+      }).toString();
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('weather unavailable');
+        chip.textContent = `天气 ${formatWeather(await response.json(), date)}`;
+      } catch (error) {
+        chip.textContent = '天气 暂不可用';
+        chip.title = '天气 API 暂时无法访问，请出发前再查中国天气网或当地气象预警。';
+      }
+    }
+
+    function amapRouteUrl(fromTitle, toTitle) {
+      const from = stopData[fromTitle];
+      const to = stopData[toTitle];
+      if (!from || !to) return 'https://ditu.amap.com/';
+      const params = new URLSearchParams({
+        from: `${from.lon},${from.lat},${fromTitle}`,
+        to: `${to.lon},${to.lat},${toTitle}`,
+        mode: 'car',
+        policy: '1'
+      });
+      return `https://uri.amap.com/navigation?${params.toString()}`;
+    }
+
+    function secondsToDriveTime(seconds) {
+      const minutes = Math.round(Number(seconds) / 60);
+      if (!Number.isFinite(minutes)) return '';
+      const hours = Math.floor(minutes / 60);
+      const rest = minutes % 60;
+      if (!hours) return `${rest}min`;
+      return rest ? `${hours}h${rest}min` : `${hours}h`;
+    }
+
+    const driveDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    let driveQueue = Promise.resolve();
+
+    async function loadDriveTime(title, leg, chips) {
+      const chipList = Array.isArray(chips) ? chips : [chips];
+      const key = localStorage.getItem('amapWebServiceKey') || DEFAULT_AMAP_WEB_SERVICE_KEY;
+      if (!key) return;
+      const from = stopData[title];
+      const to = stopData[leg.to];
+      if (!from || !to) return;
+
+      const url = new URL('https://restapi.amap.com/v3/direction/driving');
+      url.search = new URLSearchParams({
+        key,
+        origin: `${from.lon},${from.lat}`,
+        destination: `${to.lon},${to.lat}`,
+        extensions: 'base',
+        strategy: '4'
+      }).toString();
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) return;
+        const data = await response.json();
+        const path = data.route?.paths?.[0];
+        if (!path?.duration) return;
+        const distanceKm = path.distance ? `${(Number(path.distance) / 1000).toFixed(0)}km` : leg.distance;
+        chipList.forEach((chip) => {
+          chip.textContent = `驾车 到${leg.to} · 实时 ${distanceKm}/${secondsToDriveTime(path.duration)}`;
+          chip.classList.add('live');
+          chip.title = '实时用时来自高德路径规划 API；仍建议出发前打开地图确认导航。';
+        });
+      } catch (error) {
+        chipList.forEach((chip) => {
+          chip.title = '实时路径 API 暂不可用，已保留基础预计用时。';
+        });
+      }
+    }
+
+    function queueDriveTime(title, leg, chips) {
+      driveQueue = driveQueue
+        .then(() => loadDriveTime(title, leg, chips))
+        .then(() => driveDelay(700))
+        .catch(() => driveDelay(700));
+    }
+
+    document.querySelectorAll('.node').forEach((node) => {
+      const title = node.querySelector('h3')?.textContent.trim();
+      const stop = stopData[title];
+      if (!stop) return;
+
+      const tags = document.createElement('div');
+      tags.className = 'trip-tags';
+      const weatherChip = document.createElement('span');
+      weatherChip.className = 'trip-chip weather';
+      weatherChip.textContent = '天气 加载中';
+      const droneChip = document.createElement('span');
+      droneChip.className = `trip-chip drone ${stop.droneLevel}`;
+      droneChip.textContent = `无人机 ${stop.drone}`;
+      tags.append(weatherChip);
+      const leg = legData[title];
+      if (leg) {
+        const driveChip = document.createElement('a');
+        driveChip.className = 'trip-chip drive';
+        driveChip.href = amapRouteUrl(title, leg.to);
+        driveChip.target = '_blank';
+        driveChip.rel = 'noopener';
+        driveChip.textContent = `驾车 到${leg.to} · 预估 ${leg.distance}/${leg.estimate}`;
+        driveChip.title = '实时用时来自高德路径规划 API；点击可打开高德地图复核路线。';
+        const legWrap = document.createElement('div');
+        legWrap.className = 'drive-leg';
+        legWrap.append(driveChip);
+        const columns = Number(node.closest('.timeline')?.style.getPropertyValue('--cols')) || 1;
+        const index = [...node.parentElement.children].filter((child) => child.classList.contains('node')).indexOf(node);
+        legWrap.style.left = `${((index + 1) / columns) * 100}%`;
+        const mobileLegWrap = legWrap.cloneNode(true);
+        const mobileDriveChip = mobileLegWrap.querySelector('.drive');
+        node.append(mobileLegWrap);
+        node.closest('.timeline')?.append(legWrap);
+        queueDriveTime(title, leg, [driveChip, mobileDriveChip]);
+      }
+      tags.append(droneChip);
+      node.querySelector('.meta')?.after(tags);
+      loadWeatherForStop(stop, weatherChip);
+    });
+  </script>
+</body>
+</html>
