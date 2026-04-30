@@ -436,8 +436,8 @@
     <button onclick="setStyle('minimal')">极简高级风</button>
     <button onclick="setStyle('xhs')">小红书爆款风</button>
     <button onclick="setStyle('map')">地图路线风</button>
-    <button onclick="setAmapKey()">设置高德 Key</button>
     <button onclick="downloadRouteMap()">导出路线图</button>
+    <button onclick="window.print()">打印 / 导出 PDF</button>
   </div>
 
   <main class="page">
@@ -551,19 +551,6 @@
       document.body.className = style;
     }
 
-    function setAmapKey() {
-      const currentKey = localStorage.getItem('amapWebServiceKey') || '';
-      const key = prompt('请输入高德 Web服务 Key。只保存在当前浏览器，不会写入 GitHub 源码。', currentKey);
-      if (key === null) return;
-      const trimmed = key.trim();
-      if (trimmed) {
-        localStorage.setItem('amapWebServiceKey', trimmed);
-      } else {
-        localStorage.removeItem('amapWebServiceKey');
-      }
-      window.location.reload();
-    }
-
     function downloadRouteMap() {
       const link = document.createElement('a');
       link.href = 'assets/images/route_map.png';
@@ -573,7 +560,7 @@
       link.remove();
     }
 
-    const DEFAULT_AMAP_WEB_SERVICE_KEY = '6ef02c4127e2978cfbc712994806925e';
+    const ETA_PROXY_URL = 'https://super-disk-897f.505609509.workers.dev/';
 
     const stopData = {
       '成都出发': { day: '05-06', lat: 30.67, lon: 104.06, drone: '城区/机场净空谨慎', droneLevel: 'restricted' },
@@ -595,18 +582,18 @@
     };
 
     const legData = {
-      '成都出发': { to: '泸定县 / 泸定桥', distance: '230km', estimate: '2.5-3h' },
-      '泸定县 / 泸定桥': { to: '海螺沟', distance: '50km', estimate: '1-1.5h' },
-      '海螺沟': { to: '康定入住', distance: '110km', estimate: '2.5-3h' },
-      '康定出发': { to: '红海子', distance: '35km', estimate: '0.8-1h' },
-      '红海子': { to: '色拉林口', distance: '40km', estimate: '1-1.2h' },
-      '色拉林口': { to: '新都桥', distance: '70km', estimate: '1.5-2h' },
-      '新都桥出发': { to: '甲根坝村', distance: '35km', estimate: '1-1.5h' },
-      '甲根坝村': { to: '塔公草原', distance: '65km', estimate: '1.5-2h' },
-      '塔公草原': { to: '墨石公园', distance: '30km', estimate: '0.6-0.8h' },
-      '墨石公园': { to: '丹巴入住', distance: '90km', estimate: '2-2.5h' },
-      '丹巴出发': { to: '长坪沟', distance: '90km', estimate: '2.5-3h' },
-      '长坪沟': { to: '返回成都', distance: '300km', estimate: '5-6h' }
+      '成都出发': { to: '泸定县 / 泸定桥', distance: '230km', estimate: '2.5-3h', legId: 'chengdu-luding' },
+      '泸定县 / 泸定桥': { to: '海螺沟', distance: '50km', estimate: '1-1.5h', legId: 'luding-hailuogou' },
+      '海螺沟': { to: '康定入住', distance: '110km', estimate: '2.5-3h', legId: 'hailuogou-kangding' },
+      '康定出发': { to: '红海子', distance: '35km', estimate: '0.8-1h', legId: 'kangding-honghaizi' },
+      '红海子': { to: '色拉林口', distance: '40km', estimate: '1-1.2h', legId: 'honghaizi-selalinkou' },
+      '色拉林口': { to: '新都桥', distance: '70km', estimate: '1.5-2h', legId: 'selalinkou-xinduqiao' },
+      '新都桥出发': { to: '甲根坝村', distance: '35km', estimate: '1-1.5h', legId: 'xinduqiao-jiagenba' },
+      '甲根坝村': { to: '塔公草原', distance: '65km', estimate: '1.5-2h', legId: 'jiagenba-tagong' },
+      '塔公草原': { to: '墨石公园', distance: '30km', estimate: '0.6-0.8h', legId: 'tagong-moshi' },
+      '墨石公园': { to: '丹巴入住', distance: '90km', estimate: '2-2.5h', legId: 'moshi-danba' },
+      '丹巴出发': { to: '长坪沟', distance: '90km', estimate: '2.5-3h', legId: 'danba-changpinggou' },
+      '长坪沟': { to: '返回成都', distance: '300km', estimate: '5-6h', legId: 'changpinggou-chengdu' }
     };
 
     function dateForTrip(monthDay) {
@@ -678,32 +665,20 @@
 
     async function loadDriveTime(title, leg, chips) {
       const chipList = Array.isArray(chips) ? chips : [chips];
-      const key = localStorage.getItem('amapWebServiceKey') || DEFAULT_AMAP_WEB_SERVICE_KEY;
-      if (!key) return;
-      const from = stopData[title];
-      const to = stopData[leg.to];
-      if (!from || !to) return;
-
-      const url = new URL('https://restapi.amap.com/v3/direction/driving');
-      url.search = new URLSearchParams({
-        key,
-        origin: `${from.lon},${from.lat}`,
-        destination: `${to.lon},${to.lat}`,
-        extensions: 'base',
-        strategy: '4'
-      }).toString();
+      if (!leg.legId) return;
 
       try {
+        const url = new URL(ETA_PROXY_URL);
+        url.searchParams.set('leg', leg.legId);
         const response = await fetch(url);
-        if (!response.ok) return;
+        if (!response.ok) throw new Error('route unavailable');
         const data = await response.json();
-        const path = data.route?.paths?.[0];
-        if (!path?.duration) return;
-        const distanceKm = path.distance ? `${(Number(path.distance) / 1000).toFixed(0)}km` : leg.distance;
+        if (!data.durationSeconds) throw new Error('duration unavailable');
+        const distanceKm = data.distanceKm ? `${data.distanceKm}km` : leg.distance;
         chipList.forEach((chip) => {
-          chip.textContent = `驾车 到${leg.to} · 实时 ${distanceKm}/${secondsToDriveTime(path.duration)}`;
+          chip.textContent = `驾车 到${leg.to} · 实时 ${distanceKm}/${secondsToDriveTime(data.durationSeconds)}`;
           chip.classList.add('live');
-          chip.title = '实时用时来自高德路径规划 API；仍建议出发前打开地图确认导航。';
+          chip.title = '实时用时来自 Cloudflare Worker 代理的高德路径规划 API；仍建议出发前打开地图确认导航。';
         });
       } catch (error) {
         chipList.forEach((chip) => {
