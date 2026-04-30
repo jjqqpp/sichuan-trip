@@ -558,6 +558,8 @@
       window.location.reload();
     }
 
+    const DEFAULT_AMAP_WEB_SERVICE_KEY = '6ef02c4127e2978cfbc712994806925e';
+
     const stopData = {
       '成都出发': { day: '05-06', lat: 30.67, lon: 104.06, drone: '城区/机场净空谨慎', droneLevel: 'restricted' },
       '泸定县 / 泸定桥': { day: '05-06', lat: 29.92, lon: 102.23, drone: '桥梁文保先问现场', droneLevel: 'caution' },
@@ -656,8 +658,11 @@
       return rest ? `${hours}h${rest}min` : `${hours}h`;
     }
 
+    const driveDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    let driveQueue = Promise.resolve();
+
     async function loadDriveTime(title, leg, chip) {
-      const key = localStorage.getItem('amapWebServiceKey');
+      const key = localStorage.getItem('amapWebServiceKey') || DEFAULT_AMAP_WEB_SERVICE_KEY;
       if (!key) return;
       const from = stopData[title];
       const to = stopData[leg.to];
@@ -687,6 +692,13 @@
       }
     }
 
+    function queueDriveTime(title, leg, chip) {
+      driveQueue = driveQueue
+        .then(() => loadDriveTime(title, leg, chip))
+        .then(() => driveDelay(700))
+        .catch(() => driveDelay(700));
+    }
+
     document.querySelectorAll('.node').forEach((node) => {
       const title = node.querySelector('h3')?.textContent.trim();
       const stop = stopData[title];
@@ -709,7 +721,7 @@
         driveChip.target = '_blank';
         driveChip.rel = 'noopener';
         driveChip.textContent = `驾车 到${leg.to} · 预估 ${leg.distance}/${leg.estimate}`;
-        driveChip.title = '点击打开高德地图查看实时路线；点击页面顶部“设置高德 Key”后，可在页面内显示实时 ETA。';
+        driveChip.title = '实时用时来自高德路径规划 API；点击可打开高德地图复核路线。';
         const legWrap = document.createElement('div');
         legWrap.className = 'drive-leg';
         legWrap.append(driveChip);
@@ -717,7 +729,7 @@
         const index = [...node.parentElement.children].filter((child) => child.classList.contains('node')).indexOf(node);
         legWrap.style.left = `${((index + 1) / columns) * 100}%`;
         node.closest('.timeline')?.append(legWrap);
-        loadDriveTime(title, leg, driveChip);
+        queueDriveTime(title, leg, driveChip);
       }
       tags.append(droneChip);
       node.querySelector('.meta')?.after(tags);
